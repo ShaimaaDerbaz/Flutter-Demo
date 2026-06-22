@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-//import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-//import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart';
 
 class FileOpsScreen extends StatefulWidget {
   const FileOpsScreen({super.key});
@@ -25,27 +25,23 @@ class _FileOpsScreenState extends State<FileOpsScreen> {
       _statusMessage = null;
     });
 
-    /*  try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.any,
-       
-      );
+    try {
+      final result = await FilePicker.platform.pickFiles(type: FileType.any);
 
       if (result != null && result.files.single.path != null) {
         setState(() {
           _pickedFile = File(result.files.single.path!);
-          _copiedFile = null; 
+          _copiedFile = null;
           _statusMessage = 'File choosen successfully';
         });
       } else {
-       
         setState(() => _statusMessage = 'Cancelled by user');
       }
     } catch (e) {
       setState(() => _statusMessage = ' Error : $e');
     } finally {
       setState(() => _isLoading = false);
-    }*/
+    }
   }
 
   Future<void> _copyFile() async {
@@ -81,12 +77,12 @@ class _FileOpsScreenState extends State<FileOpsScreen> {
   }
 
   Future<void> _shareFile(File file) async {
-    //final result = await SharePlus.instance.share(
-    //ShareParams(files: [XFile(file.path)], text: 'Shared this file'),
-    //);
+    final result = await SharePlus.instance.share(
+      ShareParams(files: [XFile(file.path)], text: 'Shared this file'),
+    );
 
     setState(() {
-      //_statusMessage = 'Share State: ${result.status.name}';
+      _statusMessage = 'Share State: ${result.status.name}';
     });
   }
 

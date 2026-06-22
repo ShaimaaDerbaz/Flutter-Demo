@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/counter_cubit.dart';
 
-/// شاشة تجمع أساسيات Flutter:
-/// - StatelessWidget vs StatefulWidget
-/// - Column / Row / Container
-/// - TextField + State محلي بـ setState
-/// - استخدام Cubit مع BlocBuilder
+
 class BasicsScreen extends StatefulWidget {
   const BasicsScreen({super.key});
 
@@ -15,13 +11,11 @@ class BasicsScreen extends StatefulWidget {
 }
 
 class _BasicsScreenState extends State<BasicsScreen> {
-  // = var text by remember { mutableStateOf("") } في Compose
   final TextEditingController _nameController = TextEditingController();
   String _greeting = '';
 
   @override
   void dispose() {
-    // لازم تتخلص من الـ Controller - زي DisposableEffect { onDispose {} }
     _nameController.dispose();
     super.dispose();
   }
@@ -30,25 +24,24 @@ class _BasicsScreenState extends State<BasicsScreen> {
     setState(() {
       _greeting = _nameController.text.isEmpty
           ? ''
-          : 'أهلاً بيك يا ${_nameController.text} 👋';
+          : 'Welcome to:${_nameController.text} 👋';
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('الأساسيات')),
+      appBar: AppBar(title: const Text('Basica')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ---------- 1. TextField + setState ----------
-            const _SectionTitle('1. TextField و state محلي'),
+            const _SectionTitle('1. TextField و state Listening'),
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
-                labelText: 'اكتب اسمك',
+                labelText: 'Your Name',
                 border: OutlineInputBorder(),
               ),
               onChanged: (_) => _updateGreeting(),
@@ -62,7 +55,6 @@ class _BasicsScreenState extends State<BasicsScreen> {
 
             const SizedBox(height: 24),
 
-            // ---------- 2. Row / Column / Container ----------
             const _SectionTitle('2. Row و Container'),
             const Row(
               children: [
@@ -76,7 +68,6 @@ class _BasicsScreenState extends State<BasicsScreen> {
 
             const SizedBox(height: 24),
 
-            // ---------- 3. Cubit + BlocBuilder ----------
             const _SectionTitle('3. State Management بالـ Cubit'),
             BlocProvider(
               create: (_) => CounterCubit(),
@@ -89,7 +80,6 @@ class _BasicsScreenState extends State<BasicsScreen> {
   }
 }
 
-/// عنوان قسم - Widget بسيط قابل لإعادة الاستخدام
 class _SectionTitle extends StatelessWidget {
   final String text;
   const _SectionTitle(this.text);
@@ -109,7 +99,6 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-/// صندوق ملون بسيط - مثال على Container + decoration
 class _ColorBox extends StatelessWidget {
   final Color color;
   final String label;
@@ -130,7 +119,6 @@ class _ColorBox extends StatelessWidget {
   }
 }
 
-/// عداد يستخدم BlocBuilder للاستماع لتغيرات الـ Cubit
 class _CounterWidget extends StatelessWidget {
   const _CounterWidget();
 
@@ -144,7 +132,6 @@ class _CounterWidget extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // BlocBuilder = collectAsState() في Compose
           BlocBuilder<CounterCubit, int>(
             builder: (context, count) {
               return Text(
@@ -169,7 +156,7 @@ class _CounterWidget extends StatelessWidget {
               const SizedBox(width: 16),
               TextButton(
                 onPressed: () => context.read<CounterCubit>().reset(),
-                child: const Text('تصفير'),
+                child: const Text('Make zero'),
               ),
             ],
           ),

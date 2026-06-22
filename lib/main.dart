@@ -5,8 +5,6 @@ void main() {
   runApp(const MyApp());
 }
 
-/// الـ Widget الجذري للتطبيق
-/// = MainActivity + Theme setup في Compose
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -16,7 +14,6 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Basics Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // = MaterialTheme في Compose
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         useMaterial3: true,
       ),

@@ -20,7 +20,19 @@ subprojects {
 }
 gradle.afterProject {
     if (plugins.hasPlugin("com.android.library")) {
-        extensions.findByType<com.android.build.gradle.LibraryExtension>()?.compileSdk = 36
+        extensions.findByType<com.android.build.gradle.LibraryExtension>()?.apply {
+            compileSdk = 36
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+        }
+    }
+    if (plugins.hasPlugin("org.jetbrains.kotlin.android")) {
+        extensions.findByType<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension>()
+            ?.compilerOptions {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+            }
     }
 }
 

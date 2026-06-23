@@ -28,6 +28,10 @@ dependencies:
   path: ^1.9.0
 
   flutter_bloc: ^8.1.6
+  http: ^1.2.2
+
+  receive_sharing_intent: ^1.6.4
+  flutter_pdfview: ^1.4.0
 
 dev_dependencies:
   flutter_test:

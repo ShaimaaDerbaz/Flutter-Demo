@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/repositories/counter_repository_impl.dart';
+import '../../domain/usecases/increment_counter.dart';
+import '../../domain/usecases/decrement_counter.dart';
+import '../../domain/usecases/reset_counter.dart';
 import '../cubit/counter_cubit.dart';
 
 class BasicsScreen extends StatelessWidget {
@@ -28,9 +32,6 @@ class BasicsScreen extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-// TAB 1 — Widgets
-// ─────────────────────────────────────────────
 class _WidgetsTab extends StatefulWidget {
   const _WidgetsTab();
 
@@ -103,15 +104,11 @@ class _WidgetsTabState extends State<_WidgetsTab> {
                     ),
                   ),
                 ),
-                const Positioned(top: 10, left: 10, child: Text('Top-Left')),
-                const Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: Text('Bottom-Right'),
-                ),
+                const Positioned(top: 10, left: 10, child: Text('')),
+                const Positioned(bottom: 10, right: 10, child: Text(' ')),
                 const Center(
                   child: Text(
-                    'Center',
+                    ' ',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -122,7 +119,14 @@ class _WidgetsTabState extends State<_WidgetsTab> {
           const SizedBox(height: 24),
           const _SectionTitle('4. Counter'),
           BlocProvider(
-            create: (_) => CounterCubit(),
+            create: (_) {
+              final repo = CounterRepositoryImpl();
+              return CounterCubit(
+                increment: IncrementCounter(repo),
+                decrement: DecrementCounter(repo),
+                reset: ResetCounter(repo),
+              );
+            },
             child: const _CounterWidget(),
           ),
         ],
@@ -131,9 +135,6 @@ class _WidgetsTabState extends State<_WidgetsTab> {
   }
 }
 
-// ─────────────────────────────────────────────
-// TAB 2 — Forms & Lists
-// ─────────────────────────────────────────────
 class _FormsListsTab extends StatefulWidget {
   const _FormsListsTab();
 
@@ -317,9 +318,6 @@ class _FruitGridTile extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-// TAB 3 — Animations & Gestures
-// ─────────────────────────────────────────────
 class _AnimationsTab extends StatefulWidget {
   const _AnimationsTab();
 

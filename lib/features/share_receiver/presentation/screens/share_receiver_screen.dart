@@ -23,6 +23,19 @@ class _ShareReceiverScreenState extends State<ShareReceiverScreen> {
     return path.endsWith('.pdf') || mime.contains('pdf');
   }
 
+  bool get _isText {
+    final path = _currentFile.path.toLowerCase();
+    final mime = _currentFile.mimeType?.toLowerCase() ?? '';
+    if (mime.startsWith('text/')) return true;
+    const textExtensions = [
+      '.txt', '.md', '.csv', '.json', '.xml', '.html', '.htm',
+      '.yaml', '.yml', '.log', '.dart', '.py', '.js', '.ts',
+      '.css', '.swift', '.kt', '.java', '.c', '.cpp', '.h',
+      '.sh', '.bat', '.ini', '.cfg', '.conf', '.toml',
+    ];
+    return textExtensions.any((ext) => path.endsWith(ext));
+  }
+
   String get _fileName => _currentFile.path.split('/').last;
 
   void _prev() {
@@ -66,7 +79,11 @@ class _ShareReceiverScreenState extends State<ShareReceiverScreen> {
           ],
         ],
       ),
-      body: _isPdf ? _PdfViewer(path: _currentFile.path) : _ImageViewer(path: _currentFile.path),
+      body: _isPdf
+          ? _PdfViewer(path: _currentFile.path)
+          : _isText
+              ? _TextViewer(path: _currentFile.path)
+              : _ImageViewer(path: _currentFile.path),
     );
   }
 }
@@ -90,6 +107,47 @@ class _ImageViewer extends StatelessWidget {
       child: Center(
         child: Image.file(file, fit: BoxFit.contain),
       ),
+    );
+  }
+}
+
+class _TextViewer extends StatelessWidget {
+  final String path;
+
+  const _TextViewer({required this.path});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+      future: File(path).readAsString(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator(color: Colors.white));
+        }
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Could not read file:\n${snapshot.error}',
+              style: const TextStyle(color: Colors.white70),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+        return Scrollbar(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: SelectableText(
+              snapshot.data ?? '',
+              style: const TextStyle(
+                color: Colors.white,
+                fontFamily: 'monospace',
+                fontSize: 14,
+                height: 1.5,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

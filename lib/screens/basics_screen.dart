@@ -28,9 +28,6 @@ class BasicsScreen extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-// TAB 1 — Widgets
-// ─────────────────────────────────────────────
 class _WidgetsTab extends StatefulWidget {
   const _WidgetsTab();
 
